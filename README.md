@@ -22,3 +22,12 @@ My suggestion is to set up paragraph 1a into the list. That is, there's an alter
 First of all, it doesn't suffer the cold-start problem. That is, in situation when there's a new movie out and we know of ten people who rated the latter, also we know of twenty other movies rated by these ten people before: our Cosine similarity algorithm has twenty movies to choose from for recommendations to the new one. Not much, really, especially given that ratings are not neccesserily equal. Whilst, Shortest path will traverse this graph as deep as you want it to, and will likely have more to put on the table, and most of these nearest twenty movies may appear to be ranked below some more distant but more relevant ones.
 
 Second of all, in applications, where _similarity_ is necessary but not sufficient for the _relevance_, Shortest path produces more logical recommendations. Many things, we do in our lives, have causal relationship. One wouldn't make himself a coffee when he had not been going to drink it, right? We wouldn't watch the third episode of True Detective after we had watched the first, but not the second. What does Cosine similarity algorithm know of these three episodes after examination of user's ratings? They are nearly equaly similar to each other. There's no clue to guess the order. Whilst, Shortest path does account for the order of happenings. Whenever you define user's ratings right (e.g. set up: watched entire episode: positive, stopped watching in the middle: negative, plus disregard stars, likes and others of the kind), Shortest path predicts most probable sequence with no sweat.
+
+## A byte of theory
+Consider the following graph of five movies, that are being evaluated by five users:
+![Graph of five movies rated by five users](/img/5u5m_graph.png)
+where each user gave a rating as shown in the table:
+![Ratings table](/img/5u5m_table.png)
+
+Let's apply Cosine similarity to given input.
+![Cosine similarity formula](/img/cosine_i2i_formula_1.png)
