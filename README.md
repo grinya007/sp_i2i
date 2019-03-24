@@ -1,34 +1,10 @@
-# sp_i2i
-Shortest path: item-based recommendation algorithm
+# Shortest path similarity: item-based recommendation algorithm
+## tl;dr
 ```
-:~/git/sp_i2i$ ./recommend.py
-Loading...
-Cosine similarity recommendations are calculated in   7.040 s
-Shortest path recommendations are calculated in       5.253 s
-
-
-Type in movie title (q to quit): to future the back
-
-
-                                                 title
-0                            Back to the Future (1985)
-1                    Back to the Future Part II (1989)
-2                   Back to the Future Part III (1990)
-3  Ivan Vasilievich: Back to the Future (Iv ... (1973)
-4                                Back to School (1986)
-
-
-Which one? (0-4, default 0):
-
-
-===> Back to the Future (1985)
-                                Cosine similarity alg:                  Shortest path alg:
-0                   Back to the Future Part III (1990)   Back to the Future Part II (1989)
-1                    Back to the Future Part II (1989)  Back to the Future Part III (1990)
-2                                           Big (1988)   Terminator 2: Judgment Day (1991)
-3  Naked Gun: From the Files of Police Squa ... (1988)              Terminator, The (1984)
-4                                     Turbo Kid (2015)               Lion King, The (1994)
-
-
-Type in movie title (q to quit):
+git clone https://github.com/grinya007/sp_i2i.git
+cd sp_i2i
+pip install -r requirements.txt
+./recommend.py
 ```
+## What it's all about?
+Shortest path similarity is an alternative collaborative filtering item-based recommendation algorithm, it examines the order of happenings in the past to predict new happenings as opposed to conventional cosine similarity, which disregards the order in learning set. Code in this repository contains regular implementation of cosine similarity algorithm, POC implementation of shortest path similarity algorithm and a simple script ```./recommend.py``` that enables you to compare results of the two side by side. Recommendations here are based upon [MovieLens latest small](http://files.grouplens.org/datasets/movielens/ml-latest-small-README.html) dataset. DISCLAIMER: recommendations of movies, based on user ratings, isn't the best application of shortest path similarity. Simply because the order of ratings is likely to have weak correlation with order of watching.
