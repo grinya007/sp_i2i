@@ -19,11 +19,11 @@ There's quite a steady recipe for a recommendation system, established over the 
 
 My suggestion is to set up paragraph 1a into the list. That is, there's an alternative to conventional collaborative filtering: Shortest path similarity.
 
-First of all, it doesn't suffer the cold-start problem. That is, in situation when there's a new movie out and we know of ten people who rated the latter, also we know of twenty other movies rated by these ten people: our Cosine similarity algorithm has twenty movies to choose from for recommendations to the new one. Not much, really, especially given that ratings are not neccesserily equal, which means, these twenty movies are unlikely to be similar. Whilst, Shortest path will traverse this graph as deep as you want it to, and will likely have more to put on the table, and most of these nearest twenty movies may appear to be ranked below some more distant but more relevant ones.
+First of all, it doesn't suffer the cold-start problem. That is, in situation when there's a new movie out and we know of ten people who rated the latter, also we know of twenty other movies rated by these ten people: our Cosine similarity algorithm has twenty movies to choose from for recommendations to the new one. Not much, really, especially given that ratings are not necessarily equal, which means, these twenty movies are unlikely to be similar. Whilst, Shortest path will traverse this graph as deep as you want it to, and will likely have more to put on the table, and most of these nearest twenty movies may appear to be ranked below some more distant but more relevant ones.
 
-Second of all, in applications, where _similarity_ is necessary but not sufficient for the _relevance_, Shortest path produces more logical recommendations. Many things, we do in our lives, have causal relationship. One wouldn't make himself a coffee when he had not been going to drink it, right? We wouldn't watch the third episode of True Detective after we had watched the first, but not the second. What does Cosine similarity algorithm know of these three episodes after examination of user's ratings? They are nearly equaly similar to each other. There's no clue to guess the order. Whilst, Shortest path does account for the order of happenings. Whenever you define user's ratings right (e.g. set up: watched entire episode: positive, stopped watching in the middle: negative, plus disregard stars, likes and others of the kind), Shortest path predicts most probable sequence with no sweat.
+Second of all, in applications, where _similarity_ is necessary but not sufficient for the _relevance_, Shortest path produces more logical recommendations. Many things we do in our lives, have causal relationship. One wouldn't make himself a coffee when he had not been going to drink it, right? We wouldn't watch the third episode of True Detective after we had watched the first, but not the second. What does Cosine similarity algorithm know of these three episodes after examination of user's ratings? They are nearly equally similar to each other. There's no clue to guess the order. Whilst, Shortest path does account for the order of happenings. Whenever you define user's ratings right (e.g. set up: watched entire episode: positive, stopped watching in the middle: negative, plus disregard stars, likes and others of the kind), Shortest path predicts most probable sequence with no sweat.
 
-However, I don't mean to say there's something wrong with Cosine similarity algorithm itself. It works great when you match a document against learnt feature matrix to find similar documents (e.g. a search query against TFIDF matrix). Its common problem is misapplication, Cosine similarity isn't quite suitable when used as a standalone recommendation algorithm on, for example, videohostings and news websites, where similarity of articles doesn't neccessarily convert into high probability of click.
+However, I don't mean to say there's something wrong with Cosine similarity algorithm itself. It works great when you match a document against learnt feature matrix to find similar documents (e.g. a search query against TFIDF matrix). Its common problem is misapplication, Cosine similarity isn't quite suitable when used as a standalone recommendation algorithm on, for example, videohostings and news websites, where similarity of articles doesn't necessarily convert into high probability of click.
 
 ## A byte of theory
 Consider the following graph of five movies, that are being evaluated by five users:
@@ -37,7 +37,7 @@ Let's apply Cosine similarity to given input. Actually, we only need the second 
 
 ![Cosine similarity formula](/img/cosine_i2i_formula_1.png)
 
-derived from formula for [Euclidean dot product](https://en.wikipedia.org/wiki/Euclidean_vector#Dot_product). Note, that n = 3 in this case, we can't take into account ratings, given by U2 and U3, as their rating for M1 in unknown. What we get is:
+derived from formula for [Euclidean dot product](https://en.wikipedia.org/wiki/Euclidean_vector#Dot_product). Note that n = 3 in this case, we can't take into account ratings, given by U2 and U3, as their rating for M1 in unknown. What we get is:
 
 ![M1 to M2 similarity](/img/cosine_i2i_formula_m1_m2_1.png)
 
@@ -45,13 +45,13 @@ Wow, looks like they're very similar, although, everything is relative. Let's ha
 
 ![Cosine similarity recommendations](/img/cosine_i2i_recs.png)
 
-Look, M5 happens to be even more similar. Note, that in real application it's always better to normalize input values (i.e. scale them proportionally). In this particular case normalization wouldn't make any difference in ranking, but when a difference between values of similarity is getting closer to precision limitation of floating point number, normalization comes in handy.
+Look, M5 happens to be even more similar. Note that in real application it's always better to normalize input values (i.e. scale them proportionally). In this particular case normalization wouldn't make any difference in ranking, but when a difference between values of similarity is getting closer to precision limitation of floating point number, normalization comes in handy.
 
 Ok, so now we have some results. But not all 5 movies have gotten 4 recommendations, even though sparsity of the input matrix isn't that high. This is what's usually called the cold-start problem, also known as sparsity problem. Cosine similarity demands more data not only to produce _better_ recommendations, but to produce recommendations at all.
 
 There's another concern, which isn't that evident as the former. Similarities are mirrored. Meaning that, for instance, cos(M1-M2) = cos(M2-M1). Well, sounds logical, as this is _similarity_. But we're trying to make up recommendations in the first place. Imagine that M1 is "Back to the Future" and M2 is "Back to the Future II". While they are equally similar in both ways, are they equally relevant as recommendations to each other? Well, you might argue that of course, Marty gets back to 1955 right in the beginning of the second episode. But let me kindly ask you to scroll a little bit up, look at the first figure and follow all arrows between M1 and M2. Right, two users have chosen to go in the same direction and none went the other way around. What if this is a valid indication of inequality of the relevance? Use deep learning to sort it out would be a good answer. But there's a simpler way.
 
-Let's see if Shortest path siilarity algorithm can do any good in such situation. First of all let's flatten the original graph into a table of user paths, for clarity:
+Let's see if Shortest path similarity algorithm can do any good in such situation. First of all let's flatten the original graph into a table of user paths, for clarity:
 
 ![User paths](/img/sp_user_paths.png)
 
@@ -73,7 +73,7 @@ From M1 it will guide us towards M2, then to M4 through M2, since there's no dir
 
 ![Shortest path recommendations](/img/sp_recs.png)
 
-Note, that now we have full recommendations, we can't get more out of five movies. Although, I wouldn't say this is a great achievement here, since we allowed a single user to connect some of vertices, which isn't neccesserily a good idea in real application. But what's more important, now, even though M2 is the most relevant recommendation for M1, M1, in turn, is the least relevant to M2.
+Note that now we have full recommendations, we can't get more out of five movies. Although, I wouldn't say this is a great achievement here, since we allowed a single user to connect some of vertices, which isn't necessarily a good idea in real application. But what's more important, now, even though M2 is the most relevant recommendation for M1, M1, in turn, is the least relevant to M2.
 
 ## Conclusion
 There's no proof of Fermat's Theorem in my proposed Shortest path similarity algorithm. All pieces of it are superficial and broadly used in software development. Although, not only that it seems to be very natural as a part of recommendation system, but I have proven results of it, outperforming other conventional algorithms on production. If you're interested in greater details or have a dataset or application in which you'd like to try Shortest path similarity: please, don't hesitate to reach out.
