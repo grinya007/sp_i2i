@@ -45,9 +45,35 @@ Wow, looks like they're very similar, although, everything is relative. Let's ha
 
 ![Cosine similarity recommendations](/img/cosine_i2i_recs.png)
 
-Look, M5 happens to be even more similar. Note, that in real application it's always better to normilize input values (e.g. make them always remain between 0 and 1). In this particular case normalization wouldn't make any difference in ranking, but when a difference between values of similarity is getting closer to precision limitation of floating point number, normalization comes in handy.
+Look, M5 happens to be even more similar. Note, that in real application it's always better to normalize input values (i.e. scale them proportionally). In this particular case normalization wouldn't make any difference in ranking, but when a difference between values of similarity is getting closer to precision limitation of floating point number, normalization comes in handy.
 
 Ok, so now we have some results. But not all 5 movies have gotten 4 recommendations, even though sparsity of the input matrix isn't that high. This is what's usually called the cold-start problem, also known as sparsity problem. Cosine similarity demands more data not only to produce _better_ recommendations, but to produce recommendations at all.
 
 There's another concern, which isn't that evident as the former. Similarities are mirrored. Meaning that, for instance, cos(M1-M2) = cos(M2-M1). Well, sounds logical, as this is _similarity_. But we're trying to make up recommendations in the first place. Imagine that M1 is "Back to the Future" and M2 is "Back to the Future II". While they are equally similar in both ways, are they equally relevant as recommendations to each other? Well, you might argue that of course, Marty gets back to 1955 right in the beginning of the second episode. But let me kindly ask you to scroll a little bit up, look at the first figure and follow all arrows between M1 and M2. Right, two users have chosen to go in the same direction and none went the other way around. What if this is a valid indication of inequality of the relevance? Use deep learning to sort it out would be a good answer. But there's a simpler way.
 
+Let's see if Shortest path siilarity algorithm can do any good in such situation. First of all let's flatten the original graph into a table of user paths, for clarity:
+
+![User paths](/img/sp_user_paths.png)
+
+Sweet, now, since we have a graph, we can assign different lengths to its edges. In this particular case, the most logical would be to derive lengths from movie ratings. I came up with the following formula for that:
+
+![Length formula](/img/sp_edge_length_formula.png)
+
+where v and v' are connected vertices, r_iv and r_iv' are ratings, given by i-th user, w_r_i be the weight of i-th user's opinion and w_v' be the global weight of given recommendation candidate. However, when you would want to try Shortest path similarity on some other data, I encourage you to think thoroughly of what is the best way to compute lengths. My proposed formula isn't crucial for Shortest path similarity algorithm. Cosine distance could be a great option here, by the way.
+
+For simplicity, in this case with 5 movies and 5 users, I assume that all users have equal weights and all movies have equal weights. Thereby, I ended up with the following adjacency list:
+
+![Adjacency list](/img/sp_movies_adjacency_list.png)
+
+Note that this isn't a list of recommendations yet, although, each nearest vertice will inevitably become the most relevan recommendation. Now, when it's all said and done, it's time to look for shortest path. I propose to use breadth-first search with priority queue, which, for M1, will work as follows:
+
+![Shortest path for M1](/img/sp_recs_for_m1.png)
+
+From M1 it will guide us towards M2, then to M4 through M2, since there's no direct flight, then to M5 through M2 and after all to M1 through M2 and M4. After entering the graph through each of its vertices we end up with the following table of recommendations:
+
+![Shortest path recommendations](/img/sp_recs.png)
+
+Note, that now we have full recommendations, we can't get more out of five movies. Although, I wouldn't say this is a great achievement here, since we allowed a single user to connect some of vertices, which isn't neccesserily a good idea in real application. But what's more important, now, even though M2 is the most relevant recommendation for M1, M1, in turn, is the least relevant to M2.
+
+## Conclusion
+There's no proof of Fermat's Theorem in my proposed Shortest path similarity algorithm. All pieces of it are superficial and broadly used in software development. Although, not only that it seems to be very natural as a part of recommendation system, but I have proven results of it, outperforming other conventional algorithms on production. If you're interested in greater details or have a dataset or application in which you'd like to try Shortest path similarity: please, don't hesitate to reach out.
