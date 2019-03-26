@@ -70,14 +70,14 @@ class ShortestPath():
                     # we see what a user thinks of how similar they are,
                     # the more both ratings are close to each other - the higher
                     # is similarity
-                    al[m1.movieId][m2.movieId] += 1/exp(abs(m1.rating - m2.rating))
+                    al[m1.movieId][m2.movieId] += 1/exp(abs(m1.rating - m2.rating)) - 0.5
 
         for mid in al:
             # let's make a list for each movie in adjacency list, so that
             # adjacency list becomes a list indeed, along the way, we have to
             # inverse summed up similarity, so that the higher is the similarity -
             # the shorter is the length of an edge in movies graph
-            al[mid] = list(map(lambda kv: (kv[0], 1/kv[1]), al[mid].items()))
+            al[mid] = list(map(lambda kv: (kv[0], -kv[1]), al[mid].items()))
             # yes, list is required to be sorted from closest to farthest
             al[mid].sort(key = lambda r: r[1])
 
@@ -144,7 +144,7 @@ class ShortestPath():
             del r[mid]
             # listify and sort other recommendaions
             res[mid] = list(r.items())
-            res[mid].sort(key = lambda r: r[1])
+            res[mid].sort(key = lambda r: -r[1])
         # save results
         self.recs = res
 
