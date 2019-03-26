@@ -37,7 +37,7 @@ Let's apply Cosine similarity to given input. Actually, we only need the second 
 
 ![Cosine similarity formula](/img/cosine_i2i_formula_1.png)
 
-derived from formula for [Euclidean dot product](https://en.wikipedia.org/wiki/Euclidean_vector#Dot_product). Note that n = 3 in this case, we can't take into account ratings, given by U2 and U3, as their rating for M1 in unknown. What we get is:
+derived from formula for [Euclidean dot product](https://en.wikipedia.org/wiki/Euclidean_vector#Dot_product). Note that n = 3 in this case, we can't take into account ratings, given by U2 and U3, as their ratings for M1 are unknown. What we get is:
 
 ![M1 to M2 similarity](/img/cosine_i2i_formula_m1_m2_1.png)
 
