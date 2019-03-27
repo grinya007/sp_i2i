@@ -6,6 +6,53 @@ cd sp_i2i
 pip install -r requirements.txt
 ./recommend.py
 ```
+```
+Type in movie title (q to quit): future back
+
+
+                                                 title
+0                            Back to the Future (1985)
+1                    Back to the Future Part II (1989)
+2                   Back to the Future Part III (1990)
+3  Ivan Vasilievich: Back to the Future (Iv ... (1973)
+4                                 Way Back, The (2010)
+
+
+Which one? (0-4, default 0):
+
+
+===> Back to the Future (1985)
+                                Cosine similarity alg:                      Shortest path alg:
+0                   Back to the Future Part III (1990)       Back to the Future Part II (1989)
+1                    Back to the Future Part II (1989)      Back to the Future Part III (1990)
+2                                           Big (1988)     Monty Python's Life of Brian (1979)
+3  Naked Gun: From the Files of Police Squa ... (1988)  Monty Python and the Holy Grail (1975)
+4                                     Turbo Kid (2015)              Princess Bride, The (1987)
+
+
+Type in movie title (q to quit): harrypotter
+looks like you're searching for: potter harry marry carry
+
+
+                                                 title
+0  Harry Potter and the Sorcerer's Stone (a ... (2001)
+1           Harry Potter and the Goblet of Fire (2005)
+2       Harry Potter and the Chamber of Secrets (2002)
+3     Harry Potter and the Order of the Phoenix (2007)
+4        Harry Potter and the Half-Blood Prince (2009)
+
+
+Which one? (0-4, default 0):
+
+
+===> Harry Potter and the Sorcerer's Stone (a ... (2001)
+                                Cosine similarity alg:                                Shortest path alg:
+0       Harry Potter and the Chamber of Secrets (2002)    Harry Potter and the Chamber of Secrets (2002)
+1      Harry Potter and the Prisoner of Azkaban (2004)   Harry Potter and the Prisoner of Azkaban (2004)
+2  Harry Potter and the Deathly Hallows: Pa ... (2010)        Harry Potter and the Goblet of Fire (2005)
+3        Harry Potter and the Half-Blood Prince (2009)  Harry Potter and the Order of the Phoenix (2007)
+4           Harry Potter and the Goblet of Fire (2005)                                I Am Legend (2007)
+```
 ## What it's all about?
 Shortest path similarity is an alternative collaborative filtering item-based recommendation algorithm, it examines the order of happenings in the past to predict new happenings. As opposed to conventional [cosine similarity](https://en.wikipedia.org/wiki/Cosine_similarity), which disregards the order in learning set. Code in this repository contains regular implementation of cosine similarity algorithm, proof-of-concept implementation of shortest path similarity algorithm and a simple script ```./recommend.py``` that enables you to compare results of the two side by side. Recommendations here are based upon [MovieLens latest small](http://files.grouplens.org/datasets/movielens/ml-latest-small-README.html) dataset.
 
