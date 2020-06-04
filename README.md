@@ -1,4 +1,7 @@
 # Shortest path similarity: item-based recommendation algorithm
+
+[Shortest Path Similarity: A Fresh Breath to Item-based Recommendations](https://towardsdatascience.com/shortest-path-similarity-a-fresh-breath-to-item-based-recommendations-9ac3d6ba7240?source=friends_link&sk=559e96bb62511fe335e2828a7fb0c1dc)
+
 ## tl;dr
 ```
 git clone https://github.com/grinya007/sp_i2i.git
